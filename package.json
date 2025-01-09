@@ -1,5 +1,5 @@
 {
-  "name": "outlook-openapi-facade-for-watson-orchestrate",
+  "name": "outlook-facade-for-watson-orchestrate",
   "version": "1.0.15",
   "description": "API to Micrsoft Outlook Calendar   Microsoft Graph explorer: - [The OutlookAPI ](https://developer.microsoft.com/en-us/graph/graph-explorer)",
   "main": "index.js",
@@ -16,6 +16,7 @@
     "connect": "^3.2.0",
     "js-yaml": "^3.3.0",
     "oas3-tools": "^2.2.3",
+    "outlook-facade-for-watson-orchestrate": "file:",
     "request": "^2.88.2"
   }
 }

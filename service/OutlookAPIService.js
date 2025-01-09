@@ -6,6 +6,71 @@ var util = require('util');
 
 /**
  * Outlook API
+ * SEnd an email though Microsoft Graph API
+ *
+ * body Request OutlookAPI data
+ * apiKey String Api Key
+ * returns Response
+ **/
+exports.sendemail = function (body, apiKey) {
+
+  return new Promise(function (resolve, reject) {
+
+    //console.log('ApiKey: ', apiKey);
+
+    console.log('body: ', body);
+
+    var options = {
+      'method': 'POST',
+      'url': 'https://graph.microsoft.com/v1.0/me/sendMail',
+      'headers': {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer ' + apiKey
+      },
+      body: JSON.stringify({
+        "message": {
+          "subject": body.subject,
+          "body": {
+            "contentType": "Text",
+            "content": body.message
+          },
+          "toRecipients": [
+            {
+              "emailAddress": {
+                "address": body.recipient
+              }
+            }
+          ]
+        }
+      })
+
+    };
+
+    request(options, function (error, response) {
+
+      if (error) throw new Error(error);
+
+      console.log(response.body);
+
+      var returnString = response
+      if (response.statusCode === 202) {
+        returnString = "Email Sent"
+      }
+
+      response = {
+        "response": returnString
+      }
+
+      resolve(response);
+
+    });
+
+  })
+}
+
+
+/**
+ * Outlook API
  * PLan a meeting though Microsoft Graph API
  *
  * body PlanRequest OutlookAPI prompt
@@ -169,7 +234,7 @@ exports.bookmeeting = function (body, apiKey) {
       if (response.statusCode === 201) {
         returnString = "Meeting Booked"
       }
-  
+
       response = {
         "response": returnString
       }

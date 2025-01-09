@@ -40,3 +40,22 @@ module.exports.planmeeting = function planmeeting(req, res, next, body) {
       utils.writeJson(res, response);
     });
 };
+
+module.exports.sendemail = function sendemail(req, res, next, body) {
+
+  const authheader = req.headers.authorization;
+  console.log(req.headers);
+
+  const auth = new Buffer.from(authheader.split(' ')[1],
+    'base64').toString().split(':');
+  const user = auth[0];
+  const pass = auth[1];
+
+  OutlookAPI.sendemail(body, pass)
+    .then(function (response) {
+      utils.writeJson(res, response);
+    })
+    .catch(function (response) {
+      utils.writeJson(res, response);
+    });
+};
