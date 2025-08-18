@@ -20,8 +20,7 @@ externalDocs:
   description: Find out more about IBM
   url: http://IBM.io
 servers:
-- url: https://outlookservice.1apbmbk49s5e.eu-gb.codeengine.appdomain.cloud/
-- url: https://p05122wf-8080.uks1.devtunnels.ms/
+- url: https://outlookservice.1fc3gg6j1yh7.eu-gb.codeengine.appdomain.cloud/
 security:
 - basic_auth: []
 tags:
@@ -99,6 +98,40 @@ paths:
         "401":
           description: Failed to send
       x-swagger-router-controller: OutlookAPI
+  /getcalendar:
+    get:
+      tags:
+      - GetCalendar
+      summary: Get Outlook Calendar
+      description: Get my calendar using Microsoft Graph API
+      operationId: getCalendar
+      parameters:
+        - name: startDate
+          required: true    
+          in: query
+          description: Starting date to retrieve calendar. Defaults to today's date.
+          schema:
+            type: string
+            format: date
+            example: '2023-02-23'
+        - name: endDate
+          required: true          
+          in: query
+          description: End of a date range to retrieve calendar. Defaults to 7 days after `startDate`.
+          schema:
+            type: string
+            format: date
+            example: '2023-04-18'
+      responses:
+        "200":
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/tDocTable'
+        "401":
+          description: Failed to send
+      x-swagger-router-controller: OutlookAPI      
 components:
   schemas:
     EmailRequest:
@@ -180,6 +213,24 @@ components:
           type: string
           format: date-time
           example: 2024-08-21T13:00:00Z
+    tDocTable:
+      type: array
+      items:
+        $ref: '#/components/schemas/DocModel'
+    DocModel:
+      type: object
+      properties:
+        subject:
+          type: string
+          example: L&G Meeting
+        start:
+          type: string
+          format: date-time
+          example: 2024-08-21T13:00:00Z          
+        end:
+          type: string
+          format: date-time
+          example: 2024-08-21T13:00:00Z          
   securitySchemes:
     basic_auth:
       type: http

@@ -246,3 +246,92 @@ exports.bookmeeting = function (body, apiKey) {
   })
 }
 
+
+/**
+ * Outlook API
+ * Get my calendar though Microsoft Graph API
+ *
+ * body Request OutlookAPI prompt
+ * apiKey String Api Key
+ * returns Response
+ **/
+exports.getCalendar = function (body, apiKey, startDate, endDate) {
+
+  return new Promise(function (resolve, reject) {
+
+    console.error('ApiKey: ', apiKey);
+
+
+    var options = {
+      'method': 'GET',
+      'url': 'https://graph.microsoft.com/v1.0/me/calendarview?$top=1000&startdatetime=' + startDate + '&enddatetime=' + endDate,
+      'headers': {
+        'Content-Type': 'application/json',
+        'Authorization': apiKey
+      },
+      body: JSON.stringify({})
+
+    };
+
+    request(options, function (error, response) {
+      if (error) {
+        const errorResponse = { response: '99: Error in get: ' + error }
+        console.error(errorResponse)
+        resolve(errorResponse)
+        return
+      } else {
+        const responseStr = response.body
+        const responseJson = JSON.parse(responseStr)
+        console.log(responseJson)
+
+        let docs = []
+        const hashMap = new Map();
+        var i = 0
+
+        if (!responseJson.value) {
+          const errorResponse = { subject: responseJson }
+          console.error(errorResponse)
+          resolve(errorResponse)
+          return
+        }
+
+        for (var i = 0; i < responseJson.value.length; i++) {
+
+          let calendarItem = responseJson.value[i]
+          var subject = calendarItem.subject
+
+          // Convert UTC to locale date time
+          var startDate = new Date(calendarItem.start.dateTime)
+          var endDate = new Date(calendarItem.end.dateTime)
+
+          startDate.setMinutes(startDate.getMinutes() - startDate.getTimezoneOffset()); // this adds an hour if in BST
+          endDate.setMinutes(endDate.getMinutes() - endDate.getTimezoneOffset()); // this adds an hour if in BST
+          
+          var startLocale = startDate.toLocaleString('en-GB', { timeZone: 'Europe/London' });
+          var endLocale = endDate.toLocaleString('en-GB', { timeZone: 'Europe/London' });
+
+          let doc = {
+            "subject": subject,
+            "start": startLocale,
+            "end": endLocale
+          }
+
+          docs.push(doc)
+        }
+
+        // Sort documents by startDateTime
+        docs.sort((a, b) => {
+          const dateA = new Date(a.start);
+          const dateB = new Date(b.start);
+          return dateA - dateB;
+        });
+
+
+        const returnResponse = { Docs: docs }
+        console.log(returnResponse)
+        resolve(returnResponse)
+      }
+    });
+
+  })
+}
