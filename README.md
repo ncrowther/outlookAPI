@@ -1,7 +1,10 @@
 # Microsoft Outlook Graph API Facade for Watsonx Orchestrate
 
+## Author:  Nigel T. Crowther
+## Email: ncrowther@uk.ibm.com
+
 ## Overview
-This is API exposes the Microsoft Outlook Graph API as an agent in WXO.  NOTE: this is for demo purposes only
+This is API exposes the Microsoft Outlook Graph API to build an agent in WXO.  
 
 ### Install Instructions
 
@@ -9,7 +12,7 @@ This is API exposes the Microsoft Outlook Graph API as an agent in WXO.  NOTE: t
 
 https://developer.microsoft.com/en-us/graph/graph-explorer
 
-**Step 2:** Press 'Run Query'. Go to Access Token tab (Hint: key icon) and copy it for the next step:
+**Step 2:** Press 'Run Query'. Go to Access Token tab (Hint: key icon) and copy it for the next step
 
 **Step 3:** In WXO, enter Agent Builder.  Create an agent from scratch called "Outlook Agent".  Use the following description:
 
@@ -24,25 +27,25 @@ You are an assistant that manages personal outlook calendar entries.  Date time 
 
 **Step 5:** Under Toolset, select 'Add tool', then import [/api/openapi.yaml: ](./api/openapi.yaml).
 
-**Step 6:** select the following API operations:
+**Step 6:** select all the API operations:
 
 ![Create Connection](/images/apiOperations.png)
 
 **Step 7:** Press Next to enter the connections screen 
 
-**Step 8:** Select 'Add a new connection'.  Enter the following and then press 'Save and continue'
+**Step 8:** Select 'Add a new connection'.  Enter the following and press 'Save and continue'
 
 ![Create Connection](/images/createOutlookConnection.png)
 
-**Step 9:**  For the draft environment, select an autentication type of BasicAuth and a server URL of www.ibm.com
+**Step 9:**  For the Draft environment, select an autentication type of BasicAuth and a server URL of www.ibm.com
 
 **Step 10:** Select Team Credentials and press the Connect button
 
-**Step 11:**  Enter a username of test, and the password is the access token copied in step 2:
+**Step 11:**  Enter a username of test, and the password is the token copied in step 2:
 
 ![Create Draft Connection](/images/createCredsDraft.png)
 
-**Step 12:**  Repeat the step above for the Live environment.  Press Save. 
+**Step 12:**  Repeat steps 9-11 for the Live environment.  Press Save. 
 
 ![Create Draft Connection](/images/createCredsLive.png)
 
@@ -50,7 +53,7 @@ You are an assistant that manages personal outlook calendar entries.  Date time 
 
 ![Connection established](/images/connectedCreds.png)
 
-**Step 14:**  Test the agent with the following: 
+**Step 14:**  Test the agent: 
 
 ```
 Show me my outlook meetings scheduled for this week.
@@ -59,6 +62,16 @@ Show me my outlook meetings scheduled for this week.
 ![Output](/images/output.png)
 
 **Step 15:**  If all works, deploy the agent
+
+## Renewing expired access token
+
+The Orchestrate token will expire every 15 minutes.  To renew it, do the following:
+
+In the outlook connection, disconnect both DEV and PROD, then re -connect, following steps 8-13. Switching from basic auth to key/value can help reset.
+
+# STEPS FOR RUNNING YOUR OWN SERVER
+
+This section is for running the Outlook API on your own server
 
 ### Running the server locally
 
@@ -74,7 +87,6 @@ To view the Swagger UI interface:
 open http://localhost:8080/docs
 ```
 
-
 ### Deployment to code engine on IBM Cloud
 
 1.	Open Git Bash shell from VSC
@@ -87,13 +99,13 @@ open http://localhost:8080/docs
 
     ibmcloud target -g asc_watsonx
 
-4.	Select the code engine project (e.g. NTC):  
+4.	Select the code engine project:  
 
     ibmcloud ce project select -n asc-watsonx
 
 5.	Start Rancher Desktop as admin
 
-    docker login -u ncrowthe -p C****!
+    docker login -u ncrowthe -p [PASSWORD]
 
 7.	Within this folder, edit CEbuild.sh and CErun.sh and change the REGISTRY to your Docker registry.
 
@@ -111,11 +123,4 @@ open http://localhost:8080/docs
 
 10.	Open the URL using the IBM Cloud Code Engine route for the application
 
-
-
-## Renewing expired access token
-
-The Orchestrate token will expire every 15 minutes or so.  To renew it, do the following:
-
-In the connection for wxo, disconnect both DEV and PROD, then re -connect. Switching from basic auth to key/value can help
 
