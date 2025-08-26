@@ -71,7 +71,7 @@ exports.sendemail = function (body, apiKey) {
 
 /**
  * Outlook API
- * PLan a meeting though Microsoft Graph API
+ * Plan a meeting though Microsoft Graph API
  *
  * body PlanRequest OutlookAPI prompt
  * apiKey String Api Key
@@ -209,7 +209,13 @@ exports.bookmeeting = function (body, apiKey) {
           "timeZone": "UTC"
         },
         "location": {
-          "displayName": body.location
+          "displayName": "Microsoft Teams Meeting",
+          "locationType": "default",
+          "uniqueId": "Microsoft Teams Meeting",
+          "uniqueIdType": "private"
+        },
+        "onlineMeeting": {
+          "joinUrl": "https://teams.microsoft.com/l/meetup-join/19%3ameeting_YTZiZGVjYjAtYjZlZS00MTNjLTk1N2YtMDJlODFkOWFiNTM3%40thread.v2/0?context=%7b%22Tid%22%3a%22fcf67057-50c9-4ad4-98f3-ffca64add9e9%22%2c%22Oid%22%3a%22089f1ac0-0f9c-4355-b731-8c8a45a3215c%22%7d"
         },
         "attendees": [
           {
@@ -306,7 +312,7 @@ exports.getCalendar = function (body, apiKey, startDate, endDate) {
 
           startDate.setMinutes(startDate.getMinutes() - startDate.getTimezoneOffset()); // this adds an hour if in BST
           endDate.setMinutes(endDate.getMinutes() - endDate.getTimezoneOffset()); // this adds an hour if in BST
-          
+
           var startLocale = startDate.toLocaleString('en-GB', { timeZone: 'Europe/London' });
           var endLocale = endDate.toLocaleString('en-GB', { timeZone: 'Europe/London' });
 
