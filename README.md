@@ -4,7 +4,13 @@
 ## Email: ncrowther@uk.ibm.com
 
 ## Overview
-This is API exposes the Microsoft Outlook Graph API to build an agent in WXO.  
+This is API exposes the Microsoft Outlook Graph API to build an agent in WXO.  You can use it to ask questions about your calendar and schedule meetings.  
+Example: 
+```
+Show me my outlook meetings scheduled for this week.
+```
+
+![Output](/images/output.png)
 
 ### Install Instructions
 
